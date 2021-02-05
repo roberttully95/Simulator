@@ -60,10 +60,10 @@ classdef (Abstract) Simulator < handle
             n = length(t0);
             
             % Create vehicles array.
-            this.Vehicles = SimVehicle.empty(0, n);
+            this.Vehicles = Vehicle.empty(0, n);
             for i = 1:n
                 [x, y, th] = this.Border.randomInitialPose();
-                this.Vehicles(i) = SimVehicle(x, y, th, this.velocity, t0(i));
+                this.Vehicles(i) = Vehicle(x, y, th, this.velocity, t0(i));
             end
         end
     end

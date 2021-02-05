@@ -1,11 +1,13 @@
-classdef Vehicle2D < handle
-    %VEHICLE2D Vehicle2D class.
+classdef Vehicle < handle
+    %VEHICLE Vehicle class.
     
     properties
         x
         y
         th
         v
+        tInit
+        tEnd
     end
     
     properties (Dependent)
@@ -13,16 +15,18 @@ classdef Vehicle2D < handle
         pose
         vx
         vy
+        lifeSpan
     end
     
     methods
         
-        function this = Vehicle2D(x0, y0, th0, v0)
+        function this = Vehicle(x0, y0, th0, v0, t0)
             % VEHICLE2D Constructor taking initial conditions
-            this.setInitialConditions(x0, y0, th0, v0);
+            this.setInitialConditions(x0, y0, th0, v0, t0);
+            this.tEnd = Inf;
         end
         
-        function setInitialConditions(this, x0, y0, th0, v0)
+        function setInitialConditions(this, x0, y0, th0, v0, t0)
             % SETINITIALCONDITIONS Sets the initial conditions of the
             % vehicle. Can be invoked after the creation of the vehicle
             % object.
@@ -30,6 +34,7 @@ classdef Vehicle2D < handle
             this.y = y0;
             this.th = th0;
             this.v = v0;
+            this.tInit = t0;
         end
         
         
@@ -51,6 +56,11 @@ classdef Vehicle2D < handle
         function val = get.vy(this)
             % GETVY Returns the y component of the velocity vector.
             val = this.v * sin(this.th);
+        end
+        
+        function val = get.lifeSpan(this)
+            % GETLIFESPAN Returns the length of time for which the vehicle has been active.
+            val = this.tEnd - this.tInit;
         end
         
         function  plot(this, ax, color)
