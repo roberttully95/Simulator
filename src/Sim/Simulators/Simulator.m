@@ -2,14 +2,14 @@ classdef (Abstract) Simulator < handle
     %SIMULATOR Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties (Access = protected)
+    properties
         fileHandler
         simData
         Vehicles
         finished
     end
     
-    properties (Dependent, Access = protected)
+    properties (Dependent)
         dT
         fSpawn
         tEnd

@@ -1,4 +1,4 @@
-classdef VectorSimulator < Simulator
+classdef (Abstract) VectorSimulator < Simulator
     %VECTORSIMULATOR
     
     properties
@@ -7,9 +7,11 @@ classdef VectorSimulator < Simulator
     
     methods (Access = protected)
         
-        function this = VectorSimulator(varargin)
-            %VECTORSIMULATOR
-            this@Simulator(varargin{1}); 
+        function init(this, file)
+            %INIT Initializes the vector simulator.
+      
+            %Init simulator
+            init@Simulator(this, file); 
         end
         
         function plotMap(this, ax)

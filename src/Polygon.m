@@ -15,14 +15,16 @@ classdef Polygon < handle
     
     methods
         
-        function this = Polygon(coords)
+        function this = Polygon(arg)
             %POLYGON Constructor for polygon.
             
-            % Make coordinates clockwise
-            coords = Polygon.toClockwise(coords);
-            
-            % Generate polyshape
-            this.polyshape = polyshape(coords);
+            % Can pass coordinates or polyshape object.
+            if isa(arg, 'double')
+                coords = Polygon.toClockwise(arg);
+                this.polyshape = polyshape(coords);
+            elseif isa(arg, 'polyshape')
+                this.polyshape = arg;
+            end
             
             % Ensure convex
             if ~this.convex()
