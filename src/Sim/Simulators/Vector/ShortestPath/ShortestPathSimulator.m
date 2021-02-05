@@ -1,9 +1,5 @@
-classdef ShortestPathSimulator < Simulator
+classdef ShortestPathSimulator < VectorSimulator
     %SHORTESTPATHSIMULATOR
-    
-    properties
-        test
-    end
     
     methods
         
@@ -14,9 +10,6 @@ classdef ShortestPathSimulator < Simulator
             % Initialize the vector generator.
             this.init(file)
             
-            
-            
-            this.test = "test";
         end
         
     end
