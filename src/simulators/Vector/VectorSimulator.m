@@ -28,8 +28,8 @@ classdef (Abstract) VectorSimulator < Simulator
             init@Simulator(this, file); 
             
             % Construct vertex and edge lists.
-            this.verts = VectorSimulator.getVertices(this.Obstacles, this.Goal);
-            this.edges = VectorSimulator.getEdges(this.Obstacles);
+            this.verts = VectorSimulator.getVertices(this.Obstacles, this.Goal, this.Border);
+            this.edges = VectorSimulator.getEdges(this.Obstacles, this.Border);
             
             % Get visibility
             [this.visList, this.visArray] = VectorSimulator.getVisibility(this.verts, this.edges);
@@ -47,13 +47,8 @@ classdef (Abstract) VectorSimulator < Simulator
         function plotMap(this, ax)
             %PLOTMAP Plots the map in which the simulation occurs.
             
-            % Setup axis
-            cla(ax);
-            bounds = this.Border.bounds;
-            ax.XLim = [bounds.xMin, bounds.xMax];
-            ax.YLim = [bounds.yMin, bounds.yMax];
-            ax.DataAspectRatio = [1, 1, 1];
-            hold(ax , 'on');
+            % Call simulator plot map
+            plotMap@Simulator(this, ax, "Triangulation Simulation");
             
             % Plot Obstacles
             for i = 1:size(this.Obstacles, 2)
@@ -97,7 +92,7 @@ classdef (Abstract) VectorSimulator < Simulator
     % HELPING FUNCTIONS
     methods (Static)
         
-        function verts = getVertices(Obstacles, Goal)
+        function verts = getVertices(Obstacles, Goal, Border)
             
             % Get obstacle vertices
             obsSizes = arrayfun(@(o) o.length, Obstacles);
@@ -109,12 +104,13 @@ classdef (Abstract) VectorSimulator < Simulator
                 ObsVerts(vStart:vEnd, :) = [Obstacles(iObs).verts, repelem(1, sz)'];
                 vStart = vEnd + 1;
             end
-
+            
             % Add goal vertex and border vertices   
-            verts = [ObsVerts; Goal.pos, 3]; 
+            sz = Border.length;
+            verts = [ObsVerts; Border.verts, repelem(2, sz)'; Goal.pos, 3 ]; 
         end
         
-        function edges = getEdges(Obstacles)
+        function edges = getEdges(Obstacles, Border)
             %GETEDGES Generates a list of edges given an obstacle Polygon array and 
             %a goal location.
 
@@ -130,7 +126,10 @@ classdef (Abstract) VectorSimulator < Simulator
             end
 
             % Add the goal edge and border edges
-            edges = [ObsEdges; repelem(eStart, 2), 3];
+            sz = Border.length;
+            edges = [ObsEdges;...
+                     sequenceWrap(1, sz) + eStart - 1, repelem(2, sz)';...
+                     repelem(eStart + sz, 2), 3];
         end
         
         function [list, array] = getVisibility(verts, edges)

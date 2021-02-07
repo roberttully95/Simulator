@@ -40,21 +40,9 @@ classdef (Abstract) RasterSimulator < Simulator
         function plotMap(this, ax)
             %PLOTMAP Plots the map in which the simulation occurs.
             
-            % Setup axis
-            cla(ax)
-            bounds = this.Border.bounds;
-            ax.XLim = [bounds.xMin, bounds.xMax];
-            ax.YLim = [bounds.yMin, bounds.yMax];
-            ax.DataAspectRatio = [1, 1, 1];
-            hold(ax , 'on');
-                
-            % Label Axes
-            xlabel(ax, "x (meters)");
-            ylabel(ax, "y (meters)");
-
-            % Make Title
-            title(ax, "Obstacle Map");
-
+            % Call simulator plot map
+            plotMap@Simulator(this, ax, "Wavefront Simulation");
+            
             % Plot Obstacles & Goal
             scatter(ax, this.obsLocs(:, 1), this.obsLocs(:, 2), 'k', '*');
             scatter(ax, this.goalLocs(:, 1), this.goalLocs(:, 2), 'r', '*');

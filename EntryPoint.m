@@ -4,13 +4,15 @@ addpath(genpath("src"))
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Define the simulation file to be used.
-simFile = "test_02-04-21_1.json";
+simFile = "classic_02-06-21_1.json";
 
 % Create shortest path simulation
-sp = ShortestPathSimulator(simFile);
+subplot(1, 2, 1)
+sp = TriangulationSimulator(simFile);
 sp.plotMap(gca);
 
 % Create wavefront simulation
+subplot(1, 2, 2)
 wv = WavefrontSimulator(simFile, [100, 100]);
 wv.plotMap(gca);
 

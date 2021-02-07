@@ -66,10 +66,23 @@ classdef (Abstract) Simulator < handle
                 this.Vehicles(i) = Vehicle(x, y, th, this.velocity, t0(i));
             end
         end
-    end
-    
-    methods (Abstract)
-        plotMap(this, ax);
+        
+        function plotMap(this, ax, axTitle)
+            % Setup axis
+            cla(ax)
+            bounds = this.Border.bounds;
+            ax.XLim = [bounds.xMin, bounds.xMax];
+            ax.YLim = [bounds.yMin, bounds.yMax];
+            ax.DataAspectRatio = [1, 1, 1];
+            hold(ax , 'on');
+                
+            % Label Axes
+            xlabel(ax, "x (meters)");
+            ylabel(ax, "y (meters)");
+
+            % Make Title
+            title(ax, axTitle);
+        end
     end
     
     
