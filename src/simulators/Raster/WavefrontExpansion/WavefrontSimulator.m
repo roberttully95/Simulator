@@ -9,10 +9,10 @@ classdef WavefrontSimulator < RasterSimulator
     % PUBLIC METHODS
     methods (Access = public)
         
-        function this = WavefrontSimulator(file, sz)         
+        function this = WavefrontSimulator(file, ax, sz)         
            
             % Initialize the raster 
-            this.init(file, sz);
+            this.init(file, ax, sz);
             
             % Get the vector field
             [this.vectorField, this.costMap] = wavefrontExpansion(this.goalIndex, this.map);

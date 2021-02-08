@@ -6,22 +6,27 @@ addpath(genpath("src"))
 % Define the simulation file to be used.
 simFile = "classic_02-06-21_1.json";
 
-% Create shortest path simulation
-subplot(1, 2, 1)
-sp = TriangulationSimulator(simFile);
-sp.plotMap(gca);
+% Run triangulation simulation
+tri = TriangulationSimulator(simFile, gca);
+while ~tri.isFinished()
+   tri.propogate();
+   pause(1e-6)
+end
 
-% Create wavefront simulation
-subplot(1, 2, 2)
-wv = WavefrontSimulator(simFile, [100, 100]);
-wv.plotMap(gca);
-
-%{
+% Run shortest path simulation
+sp = ShortestPathSimulator(simFile);
 while ~sp.isFinished()
     sp.propogate();
-    sp.plotVehicles(gca);
+    pause(1e-6);
 end
-%}
+
+% Plot the normal distributions of the distances travelled
+%subplot(1, 2, 1);
+[triMu, triStd] = normDist(tri.getDistances(), 'r');
+%subplot(1, 2, 2);
+[spMu, spStd] = normDist(sp.getDistances(), 'b');
+
+tri.getDistances()'
 
 disp('Finished')
 

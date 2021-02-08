@@ -7,6 +7,13 @@ classdef (Abstract) Simulator < handle
         simData
         Vehicles
         finished
+        t
+    end
+    
+    properties (Access = protected)
+        handle
+        ax;
+        hasAxis;
     end
     
     properties (Dependent)
@@ -23,7 +30,16 @@ classdef (Abstract) Simulator < handle
     % PUBLIC METHODS
     methods
         
-        function init(this, file)
+        function init(this, file, ax)
+            
+            % Save axis
+            if ~isgraphics(ax)
+                this.ax = NaN;
+                this.hasAxis = false;
+            else
+                this.ax = ax;
+                this.hasAxis = true;
+            end
             
             % Load simulation data
             this.fileHandler = FileHandler(cd);
@@ -36,6 +52,7 @@ classdef (Abstract) Simulator < handle
             this.initVehicles();
             
             % Initialize other parameters
+            this.t = 0;
             this.finished = (this.tEnd == 0);
         end
         
@@ -68,20 +85,42 @@ classdef (Abstract) Simulator < handle
         end
         
         function plotMap(this, ax, axTitle)
-            % Setup axis
-            cla(ax)
-            bounds = this.Border.bounds;
-            ax.XLim = [bounds.xMin, bounds.xMax];
-            ax.YLim = [bounds.yMin, bounds.yMax];
-            ax.DataAspectRatio = [1, 1, 1];
-            hold(ax , 'on');
-                
-            % Label Axes
-            xlabel(ax, "x (meters)");
-            ylabel(ax, "y (meters)");
+            
+            if this.hasAxis
+                % Setup axis
+                cla(ax)
+                bounds = this.Border.bounds;
+                ax.XLim = [bounds.xMin, bounds.xMax];
+                ax.YLim = [bounds.yMin, bounds.yMax];
+                ax.DataAspectRatio = [1, 1, 1];
+                hold(ax , 'on');
 
-            % Make Title
-            title(ax, axTitle);
+                % Label Axes
+                xlabel(ax, "x (meters)");
+                ylabel(ax, "y (meters)");
+
+                % Make Title
+                title(ax, axTitle);
+            end
+        end
+        
+        function val = getDistances(this)
+            %GETDISTANCES
+            
+            n = size(this.Vehicles, 2);
+            val = NaN(n, 1);
+            
+            % Return NaNs if simulation not yet finished.
+            if ~this.finished
+                warning("Simulation not yet finished")
+            end
+            
+            % Get distances travelled
+            for i = 1:n
+                t1 = this.Vehicles(i).tInit;
+                t2 = this.Vehicles(i).tEnd;
+                val(i) = (t2 - t1) * this.Vehicles(i).v;
+            end
         end
     end
     

@@ -94,7 +94,19 @@ classdef Triangle < handle
             % Hold off
             hold(ax, 'off');
         end
-        
+
+        function val = containsPt(this, pt)
+            
+            d1 = cross2d(pt - this.V2, this.V1 - this.V2);
+            d2 = cross2d(pt - this.V3, this.V2 - this.V3);
+            d3 = cross2d(pt - this.V1, this.V3 - this.V1);
+
+            has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+            has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+            val = ~(has_neg && has_pos);
+        end
+
         function xVals = get.xVals(this)
             xVals = [this.V1(1), this.V2(1), this.V3(1)];
         end

@@ -8,6 +8,8 @@ classdef Vehicle < handle
         v
         tInit
         tEnd
+        handle
+        finished
     end
     
     properties (Dependent)
@@ -35,8 +37,13 @@ classdef Vehicle < handle
             this.th = th0;
             this.v = v0;
             this.tInit = t0;
+            this.finished = false;
         end
         
+        function propogate(this, dT)
+            this.x = this.x + this.vx * dT;
+            this.y = this.y + this.vy * dT;
+        end
         
         function val = get.pos(this)
             % GETPOS Returns the 2D position of the vehicle.

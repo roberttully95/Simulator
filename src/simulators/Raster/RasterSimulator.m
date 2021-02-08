@@ -20,11 +20,11 @@ classdef (Abstract) RasterSimulator < Simulator
     
     methods
         
-        function init(this, file, sz)
+        function init(this, file, ax, sz)
             %INIT Initializes the raster simulator.
             
             % Init simulator.
-            init@Simulator(this, file);
+            init@Simulator(this, file, ax);
             
             % Rasterize the map
             this.nRows = sz(1);

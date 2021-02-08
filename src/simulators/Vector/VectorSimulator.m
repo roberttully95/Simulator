@@ -21,11 +21,11 @@ classdef (Abstract) VectorSimulator < Simulator
     
     methods
         
-        function init(this, file)
+        function init(this, file, ax)
             %INIT Initializes the vector simulator.
       
             %Init simulator
-            init@Simulator(this, file); 
+            init@Simulator(this, file, ax); 
             
             % Construct vertex and edge lists.
             this.verts = VectorSimulator.getVertices(this.Obstacles, this.Goal, this.Border);
@@ -44,19 +44,21 @@ classdef (Abstract) VectorSimulator < Simulator
             [this.shortestPath, ~] = VectorSimulator.getShortestPaths(this.graph);
         end
         
-        function plotMap(this, ax)
+        function plotMap(this)
             %PLOTMAP Plots the map in which the simulation occurs.
             
-            % Call simulator plot map
-            plotMap@Simulator(this, ax, "Triangulation Simulation");
-            
-            % Plot Obstacles
-            for i = 1:size(this.Obstacles, 2)
-                this.Obstacles(i).plot(ax, 'k');
+            if this.hasAxis
+                % Call simulator plot map
+                plotMap@Simulator(this, this.ax, "Triangulation Simulation");
+
+                % Plot Obstacles
+                for i = 1:size(this.Obstacles, 2)
+                    this.Obstacles(i).plot(this.ax, 'k');
+                end
+
+                % Plot Goal
+                this.Goal.plot(this.ax , 'r');       
             end
-            
-            % Plot Goal
-            this.Goal.plot(ax , 'r');       
         end
         
         function plotShortestPath(this, ax, i)

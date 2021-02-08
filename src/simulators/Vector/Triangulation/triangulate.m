@@ -27,6 +27,18 @@ function triangles = triangulate(unstablePoints, verts, shortestPaths, goal)
     for i = 1:n
         triangles = [triangles, startToEnd(paths{2*i - 1}, paths{2*i})]; %#ok<AGROW>
     end
+    
+    % Adjust previous and next indices
+    n = size(triangles, 2);
+    for i = 1:n
+        if triangles(i).Prev ~= 0
+            triangles(i).Prev = i - 1;  %#ok<AGROW>
+        end
+        
+        if ~isnan(triangles(i).Next)
+            triangles(i).Next = i + 1;  %#ok<AGROW>
+        end
+    end
 end
 
 function unstablePointsOut = sortUnstablePoints(unstablePointsIn)
